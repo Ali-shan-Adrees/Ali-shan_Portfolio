@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alishan Adrees | Senior Odoo & ERP Engineer</title>
+    <meta name="description" content="Senior Odoo Developer and ERP Solutions Engineer specializing in business automation and Python backend systems.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        purple: {
+                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+                            400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9',
+                            800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065',
+                        },
+                    },
+                    animation: {
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- AOS (Animate on Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        @layer base {
+            body { @apply transition-colors duration-500 bg-white dark:bg-[#050505] text-gray-900 dark:text-gray-100; }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dark .glass {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .purple-glow {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .animated-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { @apply bg-purple-600/30 rounded-full; }
+        ::-webkit-scrollbar-thumb:hover { @apply bg-purple-600; }
+
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body x-data="{ darkMode: true, scrolled: false }" :class="darkMode ? 'dark' : ''" @scroll.window="scrolled = (window.pageYOffset > 50)">
+
+    <!-- Navbar -->
+    <nav :class="scrolled ? 'glass py-4 shadow-2xl translate-y-0' : 'bg-transparent py-8 translate-y-0'" class="fixed top-0 w-full z-50 transition-all duration-500 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600">
+                ALISHAN<span class="text-white dark:text-purple-500">.</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-10 text-[13px] font-semibold uppercase tracking-widest text-gray-400">
+                <a href="#about" class="hover:text-purple-400 transition-colors">About</a>
+                <a href="#experience" class="hover:text-purple-400 transition-colors">Experience</a>
+                <a href="#projects" class="hover:text-purple-400 transition-colors">Projects</a>
+                <a href="#skills" class="hover:text-purple-400 transition-colors">Skills</a>
+                <button @click="darkMode = !darkMode" class="p-3 rounded-2xl glass hover:purple-glow transition-all group">
+                    <i data-lucide="sun" x-show="darkMode" class="text-yellow-400 w-5 h-5"></i>
+                    <i data-lucide="moon" x-show="!darkMode" class="text-purple-600 w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden animated-grid">
+        <div class="absolute inset-0 hero-gradient"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center relative z-10">
+            <div data-aos="fade-right" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 border-purple-500/20">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-400">Senior Solutions Engineer</span>
+                </div>
+                
+                <h1 class="text-6xl md:text-[5rem] font-black leading-[1.1] mb-8 tracking-tight">
+                    Engineering <br/>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-purple-600 to-purple-900">
+                        Enterprise Value.
+                    </span>
+                </h1>
+
+                <p class="text-xl text-gray-400 font-light mb-12 max-w-xl leading-relaxed">
+                    Alishan Adrees specializes in architecting high-scale Odoo ERP ecosystems and Python-driven automation for the modern enterprise.
+                </p>
+
+                <div class="flex flex-wrap gap-6">
+                    <a href="#projects" class="px-10 py-5 bg-purple-600 text-white rounded-2xl font-bold shadow-2xl shadow-purple-600/30 hover:bg-purple-700 hover:-translate-y-1 transition-all flex items-center gap-3">
+                        View Projects <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="px-10 py-5 glass dark:text-white text-gray-900 rounded-2xl font-bold hover:bg-purple-600/10 hover:-translate-y-1 transition-all flex items-center gap-3">
+                        Download Resume <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="animate-float">
+                    <div class="relative z-10 w-full aspect-square rounded-[3rem] overflow-hidden glass p-3 border-purple-500/20 shadow-2xl">
+                        <div class="w-full h-full rounded-[2.5rem] bg-[#0a0a0a] overflow-hidden relative border border-white/5">
+                            <!-- Terminal Content -->
+                            <div class="p-8 font-mono text-[11px] text-purple-400/40 space-y-2 leading-relaxed opacity-60">
+                                <div>> system.init_deployment()</div>
+                                <div class="text-green-500/50">[READY] Cluster online</div>
+                                <div>> odoo.load_modules(['accounting', 'inventory', 'ai_vision'])</div>
+                                <div class="text-purple-400">> Processing complex business workflows...</div>
+                                <div class="h-4 w-full bg-white/5 rounded overflow-hidden">
+                                    <div class="h-full bg-purple-600 w-3/4 animate-pulse"></div>
+                                </div>
+                                <div>> Status: 100% Operational</div>
+                                <div>> Security: Enterprise Grade Encryption Active</div>
+                                <div>> Optimization: 42% Performance Increase via PostgreSQL Tuning</div>
+                            </div>
+                            
+                            <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent">
+                                <div class="text-center">
+                                    <div class="w-40 h-40 mx-auto rounded-full border-2 border-purple-500/30 p-2 mb-6 bg-purple-600/5">
+                                        <div class="w-full h-full rounded-full bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center shadow-2xl shadow-purple-600/50">
+                                            <i data-lucide="cpu" class="text-white w-16 h-16"></i>
+                                        </div>
+                                    </div>
+                                    <div class="font-mono text-xs tracking-widest text-purple-400 font-bold uppercase">Auth: ALISHAN_SR_ENG</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Background decor -->
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-purple-600/20 rounded-full blur-[80px]"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-900/30 rounded-full blur-[100px]"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-24 items-center">
+                <div data-aos="fade-up">
+                    <h2 class="text-5xl font-black mb-8">Senior <span class="text-purple-500">Architecture.</span></h2>
+                    <p class="text-xl text-gray-400 font-light leading-relaxed mb-10">
+                        Bridging the gap between legacy business processes and modern engineering excellence. As a senior engineer, I don't just build modules—I design scalable ecosystems that transform how enterprises operate.
+                    </p>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <div class="text-3xl font-black text-purple-500">25+</div>
+                            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Large-Scale ERPs</div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="text-3xl font-black text-purple-500">5+</div>
+                            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Years Experience</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-[2rem] p-10 border-purple-500/10" data-aos="fade-left">
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="p-4 rounded-2xl bg-purple-600/10 text-purple-500 h-fit"><i data-lucide="terminal" class="w-6 h-6"></i></div>
+                            <div>
+                                <h3 class="text-lg font-bold mb-2">Python Backend Mastery</h3>
+                                <p class="text-sm text-gray-400">Implementing high-performance, asynchronous backend systems with focus on data integrity.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="p-4 rounded-2xl bg-purple-600/10 text-purple-500 h-fit"><i data-lucide="layers" class="w-6 h-6"></i></div>
+                            <div>
+                                <h3 class="text-lg font-bold mb-2">Odoo Core Architecture</h3>
+                                <p class="text-sm text-gray-400">Deep-level customization and extension of Odoo Enterprise modules for specific business verticals.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="p-4 rounded-2xl bg-purple-600/10 text-purple-500 h-fit"><i data-lucide="database" class="w-6 h-6"></i></div>
+                            <div>
+                                <h3 class="text-lg font-bold mb-2">Advanced PostgreSQL</h3>
+                                <p class="text-sm text-gray-400">Complex query optimization and database schema design for million-row ERP datasets.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="py-32 bg-purple-600/[0.02]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-24">
+                <h2 class="text-5xl font-black mb-4">The Journey.</h2>
+                <div class="h-1 w-20 bg-purple-600 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="relative space-y-16">
+                <div class="absolute left-[31px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-purple-600/0 via-purple-600/50 to-purple-600/0"></div>
+                
+                <!-- Dysin Automobiles -->
+                <div class="relative flex flex-col md:flex-row items-center justify-between group" data-aos="fade-up">
+                    <div class="hidden md:block w-5/12 text-right pr-16">
+                        <div class="text-purple-400 font-mono text-sm mb-2">Current Position</div>
+                        <h3 class="text-3xl font-black mb-2">Odoo Developer</h3>
+                        <p class="text-gray-500 italic">310 Fairy Meadows Canal Road, Lahore</p>
+                    </div>
+                    
+                    <div class="absolute left-0 md:left-1/2 -translate-x-1/2 w-16 h-16 rounded-full glass border-purple-500/30 flex items-center justify-center z-10 group-hover:scale-110 transition-transform">
+                        <i data-lucide="briefcase" class="text-purple-500 w-6 h-6"></i>
+                    </div>
+
+                    <div class="w-full md:w-5/12 pl-20 md:pl-16">
+                        <div class="glass p-8 rounded-3xl border-purple-500/10 hover:border-purple-500/40 transition-all">
+                            <h3 class="text-xl font-bold mb-1 text-white">Dysin Automobiles Limited</h3>
+                            <p class="text-purple-400 text-sm mb-6">Senior ERP Implementation</p>
+                            <ul class="space-y-4">
+                                <li class="flex gap-3 text-sm text-gray-400">
+                                    <i data-lucide="check-circle" class="text-purple-500 w-4 h-4 shrink-0 mt-1"></i>
+                                    Module development & REST API integration
+                                </li>
+                                <li class="flex gap-3 text-sm text-gray-400">
+                                    <i data-lucide="check-circle" class="text-purple-500 w-4 h-4 shrink-0 mt-1"></i>
+                                    PostgreSQL & XML/QWeb reporting
+                                </li>
+                                <li class="flex gap-3 text-sm text-gray-400">
+                                    <i data-lucide="check-circle" class="text-purple-500 w-4 h-4 shrink-0 mt-1"></i>
+                                    Git-based collaborative workflows
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section id="projects" class="py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-20">
+                <div>
+                    <h2 class="text-5xl font-black mb-4 tracking-tighter text-white">Featured Builds.</h2>
+                    <p class="text-gray-500 font-mono text-xs uppercase tracking-[0.3em]">Codebase Portfolio</p>
+                </div>
+                <div class="text-purple-500 font-bold hover:translate-x-2 transition-transform cursor-pointer">Archive <i data-lucide="arrow-right" class="inline w-5 h-5 ml-2"></i></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- AI Project (Special) -->
+                <div class="lg:col-span-2 group relative overflow-hidden rounded-[2.5rem] glass border-purple-500/30 p-1" data-aos="zoom-in">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative h-full flex flex-col md:flex-row bg-[#080808] rounded-[2.3rem] overflow-hidden">
+                        <div class="w-full md:w-1/2 p-10 flex flex-col justify-between">
+                            <div>
+                                <div class="px-3 py-1 rounded-full bg-purple-600/20 text-purple-400 text-[10px] font-bold uppercase tracking-widest w-fit mb-6">AI Research</div>
+                                <h3 class="text-3xl font-black mb-4">Plant Disease Detection</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed mb-8">
+                                    Deep learning-based diagnostic system utilizing convolutional neural networks to identify agricultural pathogens with 98.2% accuracy.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-6">
+                                <div class="flex gap-2">
+                                    <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">Python</span>
+                                    <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">PyTorch</span>
+                                </div>
+                                <button class="p-3 rounded-full bg-purple-600 text-white"><i data-lucide="external-link" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 bg-purple-900/20 p-4">
+                            <div class="w-full h-full rounded-2xl bg-gray-900 overflow-hidden relative border border-white/5">
+                                <img src="ai_plant_detection_project_1778482636483.png" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" alt="AI Project">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass p-10 rounded-[2.5rem] border-purple-500/10 group hover:border-purple-500/40 transition-all flex flex-col justify-between" data-aos="fade-up" data-aos-delay="200">
+                    <div>
+                        <h3 class="text-2xl font-black mb-4 group-hover:text-purple-400 transition-colors">Alif Holdings ERP</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-8">Comprehensive multi-branch ERP customization for complex holding operations.</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">Odoo 16</span>
+                            <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">PostgreSQL</span>
+                        </div>
+                        <button class="text-xs font-bold text-gray-500 group-hover:text-white transition-colors">EXPLORE REPO <i data-lucide="github" class="inline w-4 h-4 ml-2"></i></button>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass p-10 rounded-[2.5rem] border-purple-500/10 group hover:border-purple-500/40 transition-all flex flex-col justify-between" data-aos="fade-up" data-aos-delay="300">
+                    <div>
+                        <h3 class="text-2xl font-black mb-4 group-hover:text-purple-400 transition-colors">Altech ERP</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-8">Industrial grade ERP system for technical service management and logistics.</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">Odoo Enterprise</span>
+                        </div>
+                        <button class="text-xs font-bold text-gray-500 group-hover:text-white transition-colors">EXPLORE REPO <i data-lucide="github" class="inline w-4 h-4 ml-2"></i></button>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="glass p-10 rounded-[2.5rem] border-purple-500/10 group hover:border-purple-500/40 transition-all flex flex-col justify-between" data-aos="fade-up" data-aos-delay="400">
+                    <div>
+                        <h3 class="text-2xl font-black mb-4 group-hover:text-purple-400 transition-colors">SJ Construction</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-8">Specialized project tracking and inventory suite for construction giants.</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">Workflow Auto</span>
+                        </div>
+                        <button class="text-xs font-bold text-gray-500 group-hover:text-white transition-colors">EXPLORE REPO <i data-lucide="github" class="inline w-4 h-4 ml-2"></i></button>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="glass p-10 rounded-[2.5rem] border-purple-500/10 group hover:border-purple-500/40 transition-all flex flex-col justify-between" data-aos="fade-up" data-aos-delay="500">
+                    <div>
+                        <h3 class="text-2xl font-black mb-4 group-hover:text-purple-400 transition-colors">AlifX Gateway</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-8">Scalable REST API layer for seamless external integrations with ERP core.</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-mono">FastAPI</span>
+                        </div>
+                        <button class="text-xs font-bold text-gray-500 group-hover:text-white transition-colors">EXPLORE REPO <i data-lucide="github" class="inline w-4 h-4 ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-24">
+                <h2 class="text-5xl font-black mb-4">Technical Arsenal.</h2>
+                <p class="text-gray-500 uppercase tracking-[0.4em] text-[10px] font-bold">Stack Overview</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+                <div class="space-y-8" data-aos="fade-right">
+                    <h3 class="text-purple-500 font-mono text-[10px] uppercase tracking-widest border-b border-purple-500/20 pb-4">Backend Core</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Python</span><span class="text-purple-500">95%</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Odoo Framework</span><span class="text-purple-500">98%</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">PostgreSQL</span><span class="text-purple-500">90%</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">FastAPI</span><span class="text-purple-500">85%</span></div>
+                    </div>
+                </div>
+
+                <div class="space-y-8" data-aos="fade-right" data-aos-delay="100">
+                    <h3 class="text-purple-500 font-mono text-[10px] uppercase tracking-widest border-b border-purple-500/20 pb-4">Frontend Layer</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">XML / QWeb</span><span class="text-purple-500">95%</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">JavaScript</span><span class="text-purple-500">80%</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Tailwind CSS</span><span class="text-purple-500">85%</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">HTML5 / CSS3</span><span class="text-purple-500">90%</span></div>
+                    </div>
+                </div>
+
+                <div class="space-y-8" data-aos="fade-right" data-aos-delay="200">
+                    <h3 class="text-purple-500 font-mono text-[10px] uppercase tracking-widest border-b border-purple-500/20 pb-4">Tools & DevOps</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Git / GitHub</span><span class="text-purple-500">Advanced</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Docker</span><span class="text-purple-500">Intermediate</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Linux CLI</span><span class="text-purple-500">Expert</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Postman API</span><span class="text-purple-500">Expert</span></div>
+                    </div>
+                </div>
+
+                <div class="space-y-8" data-aos="fade-right" data-aos-delay="300">
+                    <h3 class="text-purple-500 font-mono text-[10px] uppercase tracking-widest border-b border-purple-500/20 pb-4">Enterprise</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">WordPress</span><span class="text-purple-500">Senior</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Business Automation</span><span class="text-purple-500">Lead</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">Reporting Systems</span><span class="text-purple-500">Expert</span></div>
+                        <div class="flex items-center justify-between text-sm"><span class="text-gray-300">CRM/POS Mastery</span><span class="text-purple-500">Expert</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-32 bg-purple-600/[0.03]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="glass p-12 rounded-[3rem] border-purple-500/10 group hover:purple-glow transition-all" data-aos="fade-up">
+                    <div class="p-5 rounded-2xl bg-purple-600/10 text-purple-500 w-fit mb-8 group-hover:scale-110 transition-transform"><i data-lucide="settings" class="w-8 h-8"></i></div>
+                    <h3 class="text-2xl font-black mb-4">Odoo Customization</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Tailoring Odoo Enterprise to your exact business logic with zero friction.</p>
+                </div>
+                <div class="glass p-12 rounded-[3rem] border-purple-500/10 group hover:purple-glow transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <div class="p-5 rounded-2xl bg-purple-600/10 text-purple-500 w-fit mb-8 group-hover:scale-110 transition-transform"><i data-lucide="share-2" class="w-8 h-8"></i></div>
+                    <h3 class="text-2xl font-black mb-4">API Integrations</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Connecting your ERP with the world via robust, secure RESTful architectures.</p>
+                </div>
+                <div class="glass p-12 rounded-[3rem] border-purple-500/10 group hover:purple-glow transition-all" data-aos="fade-up" data-aos-delay="200">
+                    <div class="p-5 rounded-2xl bg-purple-600/10 text-purple-500 w-fit mb-8 group-hover:scale-110 transition-transform"><i data-lucide="zap" class="w-8 h-8"></i></div>
+                    <h3 class="text-2xl font-black mb-4">Process Automation</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Eliminating manual overhead through intelligent Python-driven business triggers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="relative rounded-[4rem] overflow-hidden glass border-purple-500/20 p-16 md:p-24 shadow-2xl">
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px]"></div>
+                
+                <div class="grid md:grid-cols-2 gap-24 relative z-10">
+                    <div>
+                        <h2 class="text-6xl font-black mb-10 tracking-tighter">Ready for the <br/><span class="text-purple-500">Next Scale?</span></h2>
+                        <p class="text-xl text-gray-400 font-light mb-12 leading-relaxed">
+                            I am open to high-impact remote collaborations, architectural consulting, and senior engineering roles.
+                        </p>
+                        
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-6 group">
+                                <div class="p-4 rounded-2xl glass text-purple-500 group-hover:purple-glow transition-all"><i data-lucide="mail" class="w-6 h-6"></i></div>
+                                <div class="text-lg font-semibold text-gray-300">alishanadrees@email.com</div>
+                            </div>
+                            <div class="flex items-center gap-6 group">
+                                <div class="p-4 rounded-2xl glass text-purple-500 group-hover:purple-glow transition-all"><i data-lucide="phone" class="w-6 h-6"></i></div>
+                                <div class="text-lg font-semibold text-gray-300">+92 310 7447734</div>
+                            </div>
+                            <div class="flex items-center gap-6 group">
+                                <div class="p-4 rounded-2xl glass text-purple-500 group-hover:purple-glow transition-all"><i data-lucide="map-pin" class="w-6 h-6"></i></div>
+                                <div class="text-lg font-semibold text-gray-300">Lahore, Pakistan</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="space-y-8">
+                        <div class="grid grid-cols-2 gap-8">
+                            <input type="text" placeholder="Your Name" class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 outline-none focus:border-purple-500 focus:bg-purple-600/5 transition-all text-white placeholder:text-gray-600" />
+                            <input type="email" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 outline-none focus:border-purple-500 focus:bg-purple-600/5 transition-all text-white placeholder:text-gray-600" />
+                        </div>
+                        <input type="text" placeholder="Project Subject" class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 outline-none focus:border-purple-500 focus:bg-purple-600/5 transition-all text-white placeholder:text-gray-600" />
+                        <textarea placeholder="Message Details" rows="5" class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 outline-none focus:border-purple-500 focus:bg-purple-600/5 transition-all text-white placeholder:text-gray-600"></textarea>
+                        <button class="w-full py-6 bg-purple-600 text-white rounded-2xl font-black tracking-widest uppercase hover:bg-purple-700 hover:shadow-2xl hover:shadow-purple-600/50 transition-all">
+                            Initiate Transmission
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12">
+            <div>
+                <div class="text-3xl font-black text-purple-600 mb-2 tracking-tighter">ALISHAN.</div>
+                <div class="text-gray-500 font-mono text-[10px] uppercase tracking-widest">Enterprise Software Architect</div>
+            </div>
+            
+            <div class="flex gap-12 text-sm font-semibold text-gray-500 uppercase tracking-widest">
+                <a href="#about" class="hover:text-white transition-colors">About</a>
+                <a href="#projects" class="hover:text-white transition-colors">Projects</a>
+                <a href="https://github.com" class="hover:text-white transition-colors">GitHub</a>
+                <a href="https://linkedin.com" class="hover:text-white transition-colors">LinkedIn</a>
+            </div>
+
+            <div class="text-gray-600 text-[10px] font-mono">
+                &copy; 2024 ALISHAN ADREES. ALL RIGHTS RESERVED.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+            easing: 'ease-out-cubic'
+        });
+
+        // Typing Effect for Role (Simple version)
+        // const roles = ["Odoo Developer", "ERP Systems Engineer", "Python Backend Developer"];
+        // ... (Alpine handles most logic now)
+    </script>
+</body>
+</html>
