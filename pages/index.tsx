@@ -24,15 +24,9 @@ import {
   Download
 } from 'lucide-react'
 
-// --- Types ---
-interface SectionProps {
-  isDarkMode: boolean
-  toggleTheme: () => void
-}
-
 // --- Components ---
 
-const Navbar = ({ isDarkMode, toggleTheme }: SectionProps) => {
+const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -101,7 +95,7 @@ const Hero = () => {
             <span className="text-xs font-semibold uppercase tracking-widest text-purple-400">Available for Remote Work</span>
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight dark:text-white text-gray-900">
+          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight text-white">
             Alishan <br/>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-purple-600 to-purple-800">
               Adrees
@@ -122,7 +116,7 @@ const Hero = () => {
             </AnimatePresence>
           </div>
 
-          <p className="text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-lg leading-relaxed">
+          <p className="text-lg text-gray-400 mb-10 max-w-lg leading-relaxed">
             Architecting scalable enterprise solutions and automating business workflows with precision. 
             Senior Odoo Developer at Dysin Automobiles Limited.
           </p>
@@ -138,7 +132,7 @@ const Hero = () => {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 glass dark:text-white text-gray-900 rounded-xl font-bold hover:bg-purple-600/10 transition-all flex items-center gap-2"
+              className="px-8 py-4 glass text-white rounded-xl font-bold hover:bg-purple-600/10 transition-all flex items-center gap-2"
             >
               Download Resume <Download size={20} />
             </motion.button>
@@ -198,7 +192,7 @@ const About = () => (
           viewport={{ once: true }}
           className="space-y-8"
         >
-          <h2 className="text-4xl font-bold dark:text-white text-gray-900">
+          <h2 className="text-4xl font-bold text-white">
             Pioneering Enterprise <br/>
             <span className="text-purple-500">Excellence.</span>
           </h2>
@@ -256,7 +250,7 @@ const Experience = () => (
   <section id="experience" className="py-24 bg-gray-900/50">
     <div className="max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold mb-4 dark:text-white text-gray-900">Professional Journey</h2>
+        <h2 className="text-4xl font-bold mb-4 text-white">Professional Journey</h2>
         <p className="text-gray-500 tracking-widest uppercase text-sm">Experience & Evolution</p>
       </div>
 
@@ -340,7 +334,7 @@ const Projects = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-4xl font-bold dark:text-white text-gray-900 mb-2">Featured Projects</h2>
+            <h2 className="text-4xl font-bold text-white mb-2">Featured Projects</h2>
             <p className="text-gray-500 uppercase tracking-widest text-xs">Innovation in Action</p>
           </div>
           <button className="hidden md:block text-purple-400 hover:text-purple-300 transition-colors font-semibold">View Archive →</button>
@@ -389,7 +383,7 @@ const Skills = () => {
   return (
     <section id="skills" className="py-24 bg-gray-900/30">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold mb-16 text-center dark:text-white text-gray-900">Technical Arsenal</h2>
+        <h2 className="text-4xl font-bold mb-16 text-center text-white">Technical Arsenal</h2>
         <div className="grid md:grid-cols-4 gap-8">
           {groups.map((group, i) => (
             <div key={i} className="space-y-6">
@@ -439,7 +433,7 @@ const Contact = () => (
         
         <div className="grid md:grid-cols-2 gap-16 relative z-10">
           <div>
-            <h2 className="text-4xl font-bold mb-6 dark:text-white text-gray-900">Let's build the <br/><span className="text-purple-500">future together.</span></h2>
+            <h2 className="text-4xl font-bold mb-6 text-white">Let's build the <br/><span className="text-purple-500">future together.</span></h2>
             <p className="text-gray-400 mb-10 leading-relaxed">
               Open for senior-level Odoo development roles, architectural consulting, and remote enterprise collaborations.
             </p>
@@ -492,15 +486,15 @@ const Footer = () => (
 
 // --- Main Page ---
 
-export default function Home({ isDarkMode, toggleTheme }: SectionProps) {
+export default function Home() {
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 font-sans selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-gray-100 font-sans selection:bg-purple-500 selection:text-white">
       <Head>
         <title>Alishan Adrees | Senior Odoo & ERP Engineer</title>
         <meta name="description" content="Senior Odoo Developer and ERP Solutions Engineer specializing in business automation and Python backend systems." />
       </Head>
 
-      <Navbar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      <Navbar />
       
       <main>
         <Hero />
