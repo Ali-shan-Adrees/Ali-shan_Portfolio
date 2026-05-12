@@ -21,8 +21,6 @@ import {
   Zap,
   BarChart3,
   CheckCircle2,
-  Moon,
-  Sun,
   Download
 } from 'lucide-react'
 
@@ -111,7 +109,7 @@ const Hero = () => {
           </h1>
 
           <div className="h-12 mb-8">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               <motion.p
                 key={roles[roleIndex]}
                 initial={{ opacity: 0, y: 20 }}
