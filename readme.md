@@ -1,153 +1,210 @@
-# clsx [![CI](https://github.com/lukeed/clsx/workflows/CI/badge.svg)](https://github.com/lukeed/clsx/actions?query=workflow%3ACI) [![codecov](https://badgen.net/codecov/c/github/lukeed/clsx)](https://codecov.io/gh/lukeed/clsx) [![licenses](https://licenses.dev/b/npm/clsx)](https://licenses.dev/npm/clsx)
+# escalade [![CI](https://github.com/lukeed/escalade/workflows/CI/badge.svg)](https://github.com/lukeed/escalade/actions) [![licenses](https://licenses.dev/b/npm/escalade)](https://licenses.dev/npm/escalade) [![codecov](https://badgen.now.sh/codecov/c/github/lukeed/escalade)](https://codecov.io/gh/lukeed/escalade)
 
-> A tiny (239B) utility for constructing `className` strings conditionally.<Br>Also serves as a [faster](bench) & smaller drop-in replacement for the `classnames` module.
+> A tiny (183B to 210B) and [fast](#benchmarks) utility to ascend parent directories
 
-This module is available in three formats:
+With [escalade](https://en.wikipedia.org/wiki/Escalade), you can scale parent directories until you've found what you're looking for.<br>Given an input file or directory, `escalade` will continue executing your callback function until either:
 
-* **ES Module**: `dist/clsx.mjs`
-* **CommonJS**: `dist/clsx.js`
-* **UMD**: `dist/clsx.min.js`
+1) the callback returns a truthy value
+2) `escalade` has reached the system root directory (eg, `/`)
 
+> **Important:**<br>Please note that `escalade` only deals with direct ancestry – it will not dive into parents' sibling directories.
+
+---
+
+**Notice:** As of v3.1.0, `escalade` now includes [Deno support](http://deno.land/x/escalade)! Please see [Deno Usage](#deno) below.
+
+---
 
 ## Install
 
 ```
-$ npm install --save clsx
+$ npm install --save escalade
 ```
+
+
+## Modes
+
+There are two "versions" of `escalade` available:
+
+#### "async"
+> **Node.js:** >= 8.x<br>
+> **Size (gzip):** 210 bytes<br>
+> **Availability:** [CommonJS](https://unpkg.com/escalade/dist/index.js), [ES Module](https://unpkg.com/escalade/dist/index.mjs)
+
+This is the primary/default mode. It makes use of `async`/`await` and [`util.promisify`](https://nodejs.org/api/util.html#util_util_promisify_original).
+
+#### "sync"
+> **Node.js:** >= 6.x<br>
+> **Size (gzip):** 183 bytes<br>
+> **Availability:** [CommonJS](https://unpkg.com/escalade/sync/index.js), [ES Module](https://unpkg.com/escalade/sync/index.mjs)
+
+This is the opt-in mode, ideal for scenarios where `async` usage cannot be supported.
 
 
 ## Usage
 
-```js
-import clsx from 'clsx';
-// or
-import { clsx } from 'clsx';
+***Example Structure***
 
-// Strings (variadic)
-clsx('foo', true && 'bar', 'baz');
-//=> 'foo bar baz'
-
-// Objects
-clsx({ foo:true, bar:false, baz:isTrue() });
-//=> 'foo baz'
-
-// Objects (variadic)
-clsx({ foo:true }, { bar:false }, null, { '--foobar':'hello' });
-//=> 'foo --foobar'
-
-// Arrays
-clsx(['foo', 0, false, 'bar']);
-//=> 'foo bar'
-
-// Arrays (variadic)
-clsx(['foo'], ['', 0, false, 'bar'], [['baz', [['hello'], 'there']]]);
-//=> 'foo bar baz hello there'
-
-// Kitchen sink (with nesting)
-clsx('foo', [1 && 'bar', { baz:false, bat:null }, ['hello', ['world']]], 'cya');
-//=> 'foo bar hello world cya'
 ```
+/Users/lukeed
+  └── oss
+    ├── license
+    └── escalade
+      ├── package.json
+      └── test
+        └── fixtures
+          ├── index.js
+          └── foobar
+            └── demo.js
+```
+
+***Example Usage***
+
+```js
+//~> demo.js
+import { join } from 'path';
+import escalade from 'escalade';
+
+const input = join(__dirname, 'demo.js');
+// or: const input = __dirname;
+
+const pkg = await escalade(input, (dir, names) => {
+  console.log('~> dir:', dir);
+  console.log('~> names:', names);
+  console.log('---');
+
+  if (names.includes('package.json')) {
+    // will be resolved into absolute
+    return 'package.json';
+  }
+});
+
+//~> dir: /Users/lukeed/oss/escalade/test/fixtures/foobar
+//~> names: ['demo.js']
+//---
+//~> dir: /Users/lukeed/oss/escalade/test/fixtures
+//~> names: ['index.js', 'foobar']
+//---
+//~> dir: /Users/lukeed/oss/escalade/test
+//~> names: ['fixtures']
+//---
+//~> dir: /Users/lukeed/oss/escalade
+//~> names: ['package.json', 'test']
+//---
+
+console.log(pkg);
+//=> /Users/lukeed/oss/escalade/package.json
+
+// Now search for "missing123.txt"
+// (Assume it doesn't exist anywhere!)
+const missing = await escalade(input, (dir, names) => {
+  console.log('~> dir:', dir);
+  return names.includes('missing123.txt') && 'missing123.txt';
+});
+
+//~> dir: /Users/lukeed/oss/escalade/test/fixtures/foobar
+//~> dir: /Users/lukeed/oss/escalade/test/fixtures
+//~> dir: /Users/lukeed/oss/escalade/test
+//~> dir: /Users/lukeed/oss/escalade
+//~> dir: /Users/lukeed/oss
+//~> dir: /Users/lukeed
+//~> dir: /Users
+//~> dir: /
+
+console.log(missing);
+//=> undefined
+```
+
+> **Note:** To run the above example with "sync" mode, import from `escalade/sync` and remove the `await` keyword.
 
 
 ## API
 
-### clsx(...input)
-Returns: `String`
+### escalade(input, callback)
+Returns: `string|void` or `Promise<string|void>`
+
+When your `callback` locates a file, `escalade` will resolve/return with an absolute path.<br>
+If your `callback` was never satisfied, then `escalade` will resolve/return with nothing (undefined).
+
+> **Important:**<br>The `sync` and `async` versions share the same API.<br>The **only** difference is that `sync` is not Promise-based.
 
 #### input
-Type: `Mixed`
+Type: `string`
 
-The `clsx` function can take ***any*** number of arguments, each of which can be an Object, Array, Boolean, or String.
+The path from which to start ascending.
 
-> **Important:** _Any_ falsey values are discarded!<br>Standalone Boolean values are discarded as well.
+This may be a file or a directory path.<br>However, when `input` is a file, `escalade` will begin with its parent directory.
 
-```js
-clsx(true, false, '', null, undefined, 0, NaN);
-//=> ''
-```
+> **Important:** Unless given an absolute path, `input` will be resolved from `process.cwd()` location.
 
-## Modes
+#### callback
+Type: `Function`
 
-There are multiple "versions" of `clsx` available, which allows you to bring only the functionality you need!
+The callback to execute for each ancestry level. It always is given two arguments:
 
-#### `clsx`
-> **Size (gzip):** 239 bytes<br>
-> **Availability:** CommonJS, ES Module, UMD
+1) `dir` - an absolute path of the current parent directory
+2) `names` - a list (`string[]`) of contents _relative to_ the `dir` parent
 
-The default `clsx` module; see [API](#API) for info.
+> **Note:** The `names` list can contain names of files _and_ directories.
 
-```js
-import { clsx } from 'clsx';
-// or
-import clsx from 'clsx';
-```
+When your callback returns a _falsey_ value, then `escalade` will continue with `dir`'s parent directory, re-invoking your callback with new argument values.
 
-#### `clsx/lite`
-> **Size (gzip):** 140 bytes<br>
-> **Availability:** CommonJS, ES Module<br>
-> **CAUTION:** Accepts **ONLY** string arguments!
+When your callback returns a string, then `escalade` stops iteration immediately.<br>
+If the string is an absolute path, then it's left as is. Otherwise, the string is resolved into an absolute path _from_ the `dir` that housed the satisfying condition.
 
-Ideal for applications that ***only*** use the string-builder pattern.
-
-Any non-string arguments are ignored!
-
-```js
-import { clsx } from 'clsx/lite';
-// or
-import clsx from 'clsx/lite';
-
-// string
-clsx('hello', true && 'foo', false && 'bar');
-// => "hello foo"
-
-// NOTE: Any non-string input(s) ignored
-clsx({ foo: true });
-//=> ""
-```
+> **Important:** Your `callback` can be a `Promise/AsyncFunction` when using the "async" version of `escalade`.
 
 ## Benchmarks
 
-For snapshots of cross-browser results, check out the [`bench`](bench) directory~!
+> Running on Node.js v10.13.0
 
-## Support
-
-All versions of Node.js are supported.
-
-All browsers that support [`Array.isArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray#Browser_compatibility) are supported (IE9+).
-
->**Note:** For IE8 support and older, please install `clsx@1.0.x` and beware of [#17](https://github.com/lukeed/clsx/issues/17).
-
-## Tailwind Support
-
-Here some additional (optional) steps to enable classes autocompletion using `clsx` with Tailwind CSS.
-
-<details>
-<summary>
-  Visual Studio Code
-</summary>
-
-1. [Install the "Tailwind CSS IntelliSense" Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
-
-2. Add the following to your [`settings.json`](https://code.visualstudio.com/docs/getstarted/settings):
-
-  ```json
-   {
-    "tailwindCSS.experimental.classRegex": [
-      ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-    ]
-   }
-  ```
-</details>
-
-You may find the [`clsx/lite`](#clsxlite) module useful within Tailwind contexts. This is especially true if/when your application **only** composes classes in this pattern:
-
-```js
-clsx('text-base', props.active && 'text-primary', props.className);
 ```
+# Load Time
+  find-up         3.891ms
+  escalade        0.485ms
+  escalade/sync   0.309ms
+
+# Levels: 6 (target = "foo.txt"):
+  find-up          x 24,856 ops/sec ±6.46% (55 runs sampled)
+  escalade         x 73,084 ops/sec ±4.23% (73 runs sampled)
+  find-up.sync     x  3,663 ops/sec ±1.12% (83 runs sampled)
+  escalade/sync    x  9,360 ops/sec ±0.62% (88 runs sampled)
+
+# Levels: 12 (target = "package.json"):
+  find-up          x 29,300 ops/sec ±10.68% (70 runs sampled)
+  escalade         x 73,685 ops/sec ± 5.66% (66 runs sampled)
+  find-up.sync     x  1,707 ops/sec ± 0.58% (91 runs sampled)
+  escalade/sync    x  4,667 ops/sec ± 0.68% (94 runs sampled)
+
+# Levels: 18 (target = "missing123.txt"):
+  find-up          x 21,818 ops/sec ±17.37% (14 runs sampled)
+  escalade         x 67,101 ops/sec ±21.60% (20 runs sampled)
+  find-up.sync     x  1,037 ops/sec ± 2.86% (88 runs sampled)
+  escalade/sync    x  1,248 ops/sec ± 0.50% (93 runs sampled)
+```
+
+## Deno
+
+As of v3.1.0, `escalade` is available on the Deno registry.
+
+Please note that the [API](#api) is identical and that there are still [two modes](#modes) from which to choose:
+
+```ts
+// Choose "async" mode
+import escalade from 'https://deno.land/escalade/async.ts';
+
+// Choose "sync" mode
+import escalade from 'https://deno.land/escalade/sync.ts';
+```
+
+> **Important:** The `allow-read` permission is required!
+
 
 ## Related
 
-- [obj-str](https://github.com/lukeed/obj-str) - A smaller (96B) and similiar utility that only works with Objects.
+- [premove](https://github.com/lukeed/premove) - A tiny (247B) utility to remove items recursively
+- [totalist](https://github.com/lukeed/totalist) - A tiny (195B to 224B) utility to recursively list all (total) files in a directory
+- [mk-dirs](https://github.com/lukeed/mk-dirs) - A tiny (420B) utility to make a directory and its parents, recursively
 
 ## License
 
