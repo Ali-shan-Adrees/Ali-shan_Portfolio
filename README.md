@@ -1,137 +1,83 @@
 <p align="center">
-  <a href="https://gulpjs.com">
-    <img height="257" width="114" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
+  <img src="https://user-images.githubusercontent.com/22095598/123793419-f5528800-d8e1-11eb-8c5f-e2dad45a9c81.png" width="108" height="108" alt="Framer Motion" />
+</p>
+<h1 align="center">Framer Motion</h1>
+<h3 align="center">
+  An open source and production-ready motion<br>library for React on the web.
+</h3>
+
+<br>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/framer-motion" target="_blank">
+    <img src="https://img.shields.io/npm/v/framer-motion.svg?style=flat-square" />
+  </a>
+  <a href="https://www.npmjs.com/package/framer-motion" target="_blank">
+  <img src="https://img.shields.io/npm/dm/framer-motion.svg?style=flat-square" />
+  </a>
+  <a href="https://twitter.com/framer" target="_blank">
+  <img src="https://img.shields.io/twitter/follow/framer.svg?style=social&label=Follow"  />
+  </a>
+  <a href="https://discord.gg/DfkSpYe" target="_blank">
+  <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord&logoColor=white" alt="Chat on Discord">
   </a>
 </p>
 
-# glob-parent
+<br>
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Azure Pipelines Build Status][azure-pipelines-image]][azure-pipelines-url] [![Travis Build Status][travis-image]][travis-url] [![AppVeyor Build Status][appveyor-image]][appveyor-url] [![Coveralls Status][coveralls-image]][coveralls-url] [![Gitter chat][gitter-image]][gitter-url]
+Framer Motion is an open source, production-ready library that's designed for all creative developers.
 
-Extract the non-magic parent path from a glob string.
+It looks like this:
 
-## Usage
-
-```js
-var globParent = require('glob-parent');
-
-globParent('path/to/*.js'); // 'path/to'
-globParent('/root/path/to/*.js'); // '/root/path/to'
-globParent('/*.js'); // '/'
-globParent('*.js'); // '.'
-globParent('**/*.js'); // '.'
-globParent('path/{to,from}'); // 'path'
-globParent('path/!(to|from)'); // 'path'
-globParent('path/?(to|from)'); // 'path'
-globParent('path/+(to|from)'); // 'path'
-globParent('path/*(to|from)'); // 'path'
-globParent('path/@(to|from)'); // 'path'
-globParent('path/**/*'); // 'path'
-
-// if provided a non-glob path, returns the nearest dir
-globParent('path/foo/bar.js'); // 'path/foo'
-globParent('path/foo/'); // 'path/foo'
-globParent('path/foo'); // 'path' (see issue #3 for details)
+```jsx
+<motion.div animate={{ x: 0 }} />
 ```
 
-## API
+It does all this:
 
-### `globParent(maybeGlobString, [options])`
+-   Springs
+-   Keyframes
+-   Layout animations
+-   Shared layout animations
+-   Gestures (drag/tap/hover)
+-   SVG paths
+-   Exit animations
+-   Server-side rendering
+-   Orchestrate animations across components
+-   CSS variables
 
-Takes a string and returns the part of the path before the glob begins. Be aware of Escaping rules and Limitations below.
+...and a whole lot more.
 
-#### options
+## Get started
 
-```js
-{
-  // Disables the automatic conversion of slashes for Windows
-  flipBackslashes: true
-}
+### 🐇 Quick start
+
+```
+npm install framer-motion
 ```
 
-## Escaping
+```jsx
+import { motion } from "framer-motion"
 
-The following characters have special significance in glob patterns and must be escaped if you want them to be treated as regular path characters:
-
-- `?` (question mark) unless used as a path segment alone
-- `*` (asterisk)
-- `|` (pipe)
-- `(` (opening parenthesis)
-- `)` (closing parenthesis)
-- `{` (opening curly brace)
-- `}` (closing curly brace)
-- `[` (opening bracket)
-- `]` (closing bracket)
-
-**Example**
-
-```js
-globParent('foo/[bar]/') // 'foo'
-globParent('foo/\\[bar]/') // 'foo/[bar]'
+export const MyComponent = ({ isVisible }) => (
+    <motion.div animate={{ opacity: isVisible ? 1 : 0 }} />
+)
 ```
 
-## Limitations
+### 📚 Docs
 
-### Braces & Brackets
-This library attempts a quick and imperfect method of determining which path
-parts have glob magic without fully parsing/lexing the pattern. There are some
-advanced use cases that can trip it up, such as nested braces where the outer
-pair is escaped and the inner one contains a path separator. If you find
-yourself in the unlikely circumstance of being affected by this or need to
-ensure higher-fidelity glob handling in your library, it is recommended that you
-pre-process your input with [expand-braces] and/or [expand-brackets].
+Check out [our documentation](https://www.framer.com/docs/) for guides and a full API reference.
 
-### Windows
-Backslashes are not valid path separators for globs. If a path with backslashes
-is provided anyway, for simple cases, glob-parent will replace the path
-separator for you and return the non-glob parent path (now with
-forward-slashes, which are still valid as Windows path separators).
+Or checkout [our examples](https://www.framer.com/docs/examples/) for inspiration.
 
-This cannot be used in conjunction with escape characters.
+### 🛠 Contribute
 
-```js
-// BAD
-globParent('C:\\Program Files \\(x86\\)\\*.ext') // 'C:/Program Files /(x86/)'
+Want to contribute to Framer Motion? Our [contributing guide](https://github.com/framer/motion/blob/master/CONTRIBUTING.md) has you covered.
 
-// GOOD
-globParent('C:/Program Files\\(x86\\)/*.ext') // 'C:/Program Files (x86)'
-```
+### 👩🏻‍⚖️ License
 
-If you are using escape characters for a pattern without path parts (i.e.
-relative to `cwd`), prefix with `./` to avoid confusing glob-parent.
+Framer Motion is MIT licensed.
 
-```js
-// BAD
-globParent('foo \\[bar]') // 'foo '
-globParent('foo \\[bar]*') // 'foo '
+## Framer
 
-// GOOD
-globParent('./foo \\[bar]') // 'foo [bar]'
-globParent('./foo \\[bar]*') // '.'
-```
-
-## License
-
-ISC
-
-[expand-braces]: https://github.com/jonschlinkert/expand-braces
-[expand-brackets]: https://github.com/jonschlinkert/expand-brackets
-
-[downloads-image]: https://img.shields.io/npm/dm/glob-parent.svg
-[npm-url]: https://www.npmjs.com/package/glob-parent
-[npm-image]: https://img.shields.io/npm/v/glob-parent.svg
-
-[azure-pipelines-url]: https://dev.azure.com/gulpjs/gulp/_build/latest?definitionId=2&branchName=master
-[azure-pipelines-image]: https://dev.azure.com/gulpjs/gulp/_apis/build/status/glob-parent?branchName=master
-
-[travis-url]: https://travis-ci.org/gulpjs/glob-parent
-[travis-image]: https://img.shields.io/travis/gulpjs/glob-parent.svg?label=travis-ci
-
-[appveyor-url]: https://ci.appveyor.com/project/gulpjs/glob-parent
-[appveyor-image]: https://img.shields.io/appveyor/ci/gulpjs/glob-parent.svg?label=appveyor
-
-[coveralls-url]: https://coveralls.io/r/gulpjs/glob-parent
-[coveralls-image]: https://img.shields.io/coveralls/gulpjs/glob-parent/master.svg
-
-[gitter-url]: https://gitter.im/gulpjs/gulp
-[gitter-image]: https://badges.gitter.im/gulpjs/gulp.svg
+Get on the same page as your designers before production. Get started with [design and prototyping in Framer](https://www.framer.com/).
