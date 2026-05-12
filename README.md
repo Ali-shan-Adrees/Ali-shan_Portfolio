@@ -1,6 +1,15 @@
-# caniuse-lite
+# @emotion/is-prop-valid
 
-A smaller version of caniuse-db, with only the essentials!
+> Check whether a prop is valid for HTML and SVG elements
 
-## Docs
-Read full docs **[here](https://github.com/browserslist/caniuse-lite#readme)**.
+```bash
+yarn add @emotion/is-prop-valid
+```
+
+```jsx
+import isPropValid from '@emotion/is-prop-valid'
+
+isPropValid('href') // true
+
+isPropValid('someRandomProp') // false
+```

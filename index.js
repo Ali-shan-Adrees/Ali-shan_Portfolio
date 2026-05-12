@@ -1,30 +1,15 @@
-"use strict";
-const pattern = /-(\w|$)/g;
+// @flow
+import memoize from '@emotion/memoize'
 
-const callback = (dashChar, char) => char.toUpperCase();
+declare var codegen: { require: string => RegExp }
 
+const reactPropsRegex = codegen.require('./props')
 
-
-const camelCaseCSS = property =>
-{
-	property = property.toLowerCase();
-
-	// NOTE :: IE8's "styleFloat" is intentionally not supported
-	if (property === "float")
-	{
-		return "cssFloat";
-	}
-	// Microsoft vendor-prefixes are uniquely cased
-	else if (property.startsWith("-ms-"))
-	{
-		return property.substr(1).replace(pattern, callback);
-	}
-	else
-	{
-		return property.replace(pattern, callback);
-	}
-};
-
-
-
-module.exports = camelCaseCSS;
+// https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
+export default memoize(
+  prop =>
+    reactPropsRegex.test(prop) ||
+    (prop.charCodeAt(0) === 111 /* o */ &&
+    prop.charCodeAt(1) === 110 /* n */ &&
+      prop.charCodeAt(2) < 91) /* Z+1 */
+)
